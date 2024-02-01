@@ -1,0 +1,16 @@
+FROM debian:12-slim
+USER root
+
+RUN apt update
+RUN apt install -y python3-pip  git
+
+RUN mkdir -p /grade/student /grade/tests /grade/results /grade/run
+RUN mkdir -p /autograder
+
+WORKDIR /grade
+RUN python3 -m pip install --user  git+https://github.com/insper-education/pytest-insper.git requests PyYAML lxml edulint pytest --break-system-packages
+
+COPY ./entrypoint.sh /autograder
+COPY ./pltest.py /autograder
+
+# ENTRYPOINT ["/autograder/entrypoint.sh"]
