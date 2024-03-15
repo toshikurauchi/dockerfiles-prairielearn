@@ -30,4 +30,4 @@ jobs:
         with:
           context: python
           push: true
-          tags: user/app:latest
+          tags: toshikurauchi/insper-bcc-python:latest
