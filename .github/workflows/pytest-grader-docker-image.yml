@@ -1,4 +1,4 @@
-name: ci
+name: pytest-grader-docker-image
 
 on:
   push:
