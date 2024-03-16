@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
     paths:
-      - "python/**"
+      - "pytest-grader/**"
 
 jobs:
   docker:
@@ -25,6 +25,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: python
+          context: pytest-grader
           push: true
           tags: toshikurauchi/insper-bcc-pytest-grader:latest
