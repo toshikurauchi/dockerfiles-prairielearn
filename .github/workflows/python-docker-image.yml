@@ -6,7 +6,6 @@ on:
       - "main"
     paths:
       - "python/**"
-  workflow_call:
 
 jobs:
   docker:
