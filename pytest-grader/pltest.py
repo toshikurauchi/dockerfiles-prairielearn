@@ -3,20 +3,6 @@ import traceback
 import lxml.etree
 
 
-def parse_edulint_output():
-    def clean(line):
-        line = line[line.find(' '):]
-        return line
-
-    with open('/grade/lint_output.txt') as infile:
-        lint_output = infile.readlines()
-
-    lint_output = [ f'{i+1}. {clean(line)}' for i, line in enumerate(lint_output) if line.split()[1][0] in ['R', 'C'] ]
-    return {'name': 'Teste de Qualidade de Código',
-            'points': 0 if len(lint_output) > 0 else 1,
-            'max_points': 1,
-            'output': 'Seu código apresentou os seguintes erros de qualidade:\n' +  '\n'.join(lint_output)}
-
 def parse_pytest_output():
     pytest_results = []
 
@@ -26,11 +12,17 @@ def parse_pytest_output():
     pytest_output = lxml.etree.fromstring(pytest_output)
 
     for test in pytest_output.iter('testcase'):
+        max_points = 1
+        properties = test.findall('properties/property')
+        for property in properties:
+            if property.get('name') == 'max_points':
+                max_points = property.get('value')
+        other_children = [child for child in test.getchildren() if child.tag != 'properties']
         pytest_results.append({
             'name': test.get('name'),
-            'points': 1 if len(test.getchildren()) == 0 else 0,
-            'max_points': 1,
-            'output': test.find('failure').get('message') if len(test.getchildren()) > 0 else ''
+            'points': max_points if len(other_children) == 0 else 0,
+            'max_points': max_points,
+            'output': test.find('failure').get('message') if len(other_children) > 0 else ''
         })
 
     return pytest_results
@@ -39,7 +31,6 @@ def parse_pytest_output():
 if __name__ == '__main__':
     try:
         results = []
-        # results.append(parse_edulint_output())
         results.extend(parse_pytest_output())
 
         # Compile total number of points
