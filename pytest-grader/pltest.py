@@ -16,7 +16,7 @@ def parse_pytest_output():
         properties = test.findall('properties/property')
         for property in properties:
             if property.get('name') == 'max_points':
-                max_points = property.get('value')
+                max_points = int(property.get('value'))
         other_children = [child for child in test.getchildren() if child.tag != 'properties']
         pytest_results.append({
             'name': test.get('name'),
