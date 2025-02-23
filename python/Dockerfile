@@ -9,7 +9,7 @@ ENTRYPOINT ["/usr/bin/entrypoint.sh", "--bind-addr", "0.0.0.0:8080", "--auth", "
 
 USER coder
 
-RUN python3 -m pip install --user pytest-insper requests PyYAML lxml edulint pytest python-timeout --break-system-packages
+RUN python3 -m pip install --user pytest-insper requests PyYAML lxml edulint pytest pytest-timeout --break-system-packages
 RUN code-server --install-extension ms-python.python
 
 
